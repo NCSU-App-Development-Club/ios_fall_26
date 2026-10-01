@@ -16,7 +16,6 @@ struct ETAText: View {
         switch minutes {
         case 0:
             return "Now"
-            
         case 1..<60:
             return "\(minutes) min"
         default:
@@ -34,4 +33,16 @@ struct ETAText: View {
         // TODO (Issue #6): Show `label` with the right styling.
         PlaceholderBox("ETAText: \(label)")
     }
+}
+
+#Preview {
+    VStack(alignment: .leading, spacing: 16) {
+        ETAText(minutes: 0)
+        ETAText(minutes: 1)
+        ETAText(minutes: 12)
+        ETAText(minutes: 60)
+        ETAText(minutes: 65)
+        ETAText(minutes: 135)
+    }
+    .padding()
 }
