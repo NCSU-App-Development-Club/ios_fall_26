@@ -31,7 +31,7 @@ struct ETAText: View {
         
     var body: some View {
         // TODO (Issue #6): Show `label` with the right styling.
-        PlaceholderBox("ETAText: \(label)")
+        Text("ETAText: \(label)")
     }
 }
 
