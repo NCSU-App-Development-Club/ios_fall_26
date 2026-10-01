@@ -8,14 +8,19 @@ struct RouteBadge: View {
     let route: Route
 
     var body: some View {
-        // TODO (Issue #2): Replace this placeholder with the real badge.
-        // Use route.number for the text and route.color for the background.
-        PlaceholderBox("RouteBadge \(route.number)")
+        Text(route.number)
+            .bold()
+            .padding()
+            .foregroundStyle(.white)
+            .background(route.color, in: RoundedRectangle(cornerRadius: Radius.small))
+            .foregroundStyle(.white)
+
     }
+
 }
 
 #Preview {
-    VStack(spacing: Spacing.m) {
+    HStack(spacing: Spacing.m) {
         RouteBadge(route: .sample40)
         RouteBadge(route: .sample41)
         RouteBadge(route: .sample3)
