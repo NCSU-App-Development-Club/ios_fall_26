@@ -11,7 +11,28 @@ struct SearchBar: View {
 
     var body: some View {
         // TODO (Issue #7): Replace this placeholder with the real search bar.
-        PlaceholderBox("SearchBar: \"\(text)\"")
+        HStack(){
+            
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(.secondary)
+            
+            TextField(
+                placeholder,
+                text : $text)
+            if (text != "") {
+                Button {
+                    text = ""
+                }
+                label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.secondary)
+
+                }
+            }
+            
+        }
+        .padding()
+        .overlay(Capsule().stroke(.gray, lineWidth: 1))
     }
 }
 
