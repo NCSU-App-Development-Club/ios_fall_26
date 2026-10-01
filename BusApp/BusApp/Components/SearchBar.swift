@@ -15,12 +15,17 @@ struct SearchBar: View {
     }
 }
 
-#Preview {
-    @Previewable @State var text = ""
-    VStack(spacing: Spacing.m) {
-        SearchBar(text: $text)
-        Text("You typed: \(text)")
-            .foregroundStyle(.secondary)
+#Preview( body: <#@MainActor () -> any View#>)
+if #available(iOS 17.0, *) {
+    do {
+        @Previewable @State var text = ""
+        VStack(spacing: Spacing.m) {
+            SearchBar(text: $text)
+            Text("You typed: \(text)")
+                .foregroundStyle(.secondary)
+        }
+        .padding()
     }
-    .padding()
+} else {
+    // Fallback on earlier versions
 }

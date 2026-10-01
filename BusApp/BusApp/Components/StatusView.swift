@@ -12,15 +12,35 @@ struct StatusView: View {
     let message: String
 
     var body: some View {
-        // TODO (Issue #5): Replace this placeholder with the real status view.
+        VStack {
+            
+            Image(systemName: systemImage)
+                .padding()
+            Text(title)
+                .bold()
+            Spacer()
+            Text(message)
+                .multilineTextAlignment(.center)
+        }
         PlaceholderBox("StatusView: \(title)")
     }
+       
 }
-
-#Preview("Empty") {
-    StatusView(systemImage: "bus", title: "No buses right now", message: "Nothing is scheduled for this stop. Check back later.")
+#Preview {
+    struct PreviewWrapper: View {
+        @State private var text = ""
+        var body: some View {
+            SearchBar(text: $text)
+        }
+    }
+    return PreviewWrapper()
 }
-
-#Preview("Error") {
-    StatusView(systemImage: "wifi.slash", title: "Couldn't load arrivals", message: "Check your connection and try again.")
-}
+//
+//
+//#Preview("Empty") {
+//    StatusView(systemImage: "bus", title: "No buses right now", message: "Nothing is scheduled for this stop. Check back later.")
+//}
+//
+//#Preview("Error") {
+//    StatusView(systemImage: "wifi.slash", title: "Couldn't load arrivals", message: "Check your connection and try again.")
+//}
