@@ -1,0 +1,73 @@
+# Fails a PR that changes the Xcode project file (project.pbxproj).
+#
+# Why: Xcode edits this file on its own (signing team, Xcode version, iOS target),
+# and those accidental edits cause merge conflicts for everyone. Component PRs
+# never need to change it — new Swift files show up automatically.
+#
+# Intentional project changes (adding a package, a new target, etc.):
+# add the label "project-change-ok" to the PR and this check passes.
+
+name: Project file check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for project.pbxproj changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          BRANCH: ${{ github.event.pull_request.head.ref }}
+          ALLOWED: ${{ contains(github.event.pull_request.labels.*.name, 'project-change-ok') }}
+        run: |
+          FILE="BusApp/BusApp.xcodeproj/project.pbxproj"
+
+          if [ "$ALLOWED" = "true" ]; then
+            echo "Label 'project-change-ok' is set — skipping check."
+            exit 0
+          fi
+
+          if ! gh api "repos/$REPO/pulls/$PR/files" --paginate --jq '.[].filename' | grep -qx "$FILE"; then
+            echo "✅ project.pbxproj is unchanged."
+            exit 0
+          fi
+
+          MSG=$(cat <<EOF
+          <!-- project-file-check -->
+          ### ⚠️ This PR changes the Xcode project file
+
+          Xcode changed \`project.pbxproj\` on your Mac (usually the signing team or Xcode settings), and it got committed. That causes merge conflicts for everyone, so please undo it.
+
+          **Fix — run these in Terminal, one line at a time, from the repo folder:**
+
+          \`\`\`
+          git switch $BRANCH
+          git fetch origin
+          git checkout origin/main -- $FILE
+          git commit -m "Use main's project file"
+          git push
+          \`\`\`
+
+          This puts back main's copy of the project file. Your Swift code is not touched. Once you push, this check re-runs and turns green.
+
+          **So it doesn't happen again:** in Xcode → BusApp target → Signing & Capabilities, keep **Team = None**, and don't click "Fix Issue" on the signing warning. The Simulator doesn't need a team.
+          EOF
+          )
+
+          # Post the instructions once (not on every push).
+          if ! gh api "repos/$REPO/issues/$PR/comments" --paginate --jq '.[].body' | grep -q 'project-file-check'; then
+            gh pr comment "$PR" --repo "$REPO" --body "$MSG" || true
+          fi
+
+          echo "$MSG" >> "$GITHUB_STEP_SUMMARY"
+          echo "::error file=$FILE::This PR changes project.pbxproj. See the PR comment for the one-step fix."
+          exit 1
