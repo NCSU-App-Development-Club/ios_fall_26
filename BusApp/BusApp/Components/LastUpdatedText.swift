@@ -8,16 +8,26 @@ import SwiftUI
 struct LastUpdatedText: View {
     /// When the data was last loaded.
     let date: Date
-
-    /// TODO (Issue #21): Return the right words for `date`.
-    /// Right now it just prints the raw date — fix it!
-    var label: String {
-        "Updated \(date)"
-    }
-
+    
     var body: some View {
-        // TODO (Issue #21): Show `label` with the right styling.
-        PlaceholderBox(label)
+        TimelineView(.everyMinute) { context in
+            Text(label(at: context.date))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+    }
+    
+    private func label(at now: Date) -> String {
+        let seconds = Date.now.timeIntervalSince(date)
+        let minutes = Int(seconds / 60)
+        
+        if minutes < 1 {
+            return "Updated just now"
+        } else if minutes < 60 {
+            return "Updated \(minutes) min ago"
+        } else {
+            return "Updated at \(date.formatted(date: .omitted, time: .shortened))"
+        }
     }
 }
 
