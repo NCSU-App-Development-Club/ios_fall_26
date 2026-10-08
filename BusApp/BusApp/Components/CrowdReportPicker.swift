@@ -14,7 +14,26 @@ struct CrowdReportPicker: View {
     var body: some View {
         // TODO (Issue #20): Replace this placeholder with the real picker.
         // Hint: `CrowdLevel.allCases` is every level, in order.
-        PlaceholderBox("CrowdReportPicker")
+        HStack(spacing: Spacing.s) {
+            ForEach(CrowdLevel.allCases) { level in
+                let isSelected = selection == level
+                
+                Button {
+                    selection = (selection == level) ? nil: level
+                } label: {
+                    Text(level.rawValue)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .foregroundStyle(isSelected ? Color.white: Color.primary)
+                        .background(isSelected ? Color.ncsuRed: Color(.quaternarySystemFill), in: RoundedRectangle(cornerRadius: Radius.small))
+                }
+
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(isSelected ? .isSelected : [])
+            }
+        }
+        .sensoryFeedback(.selection, trigger: selection)
+
     }
 }
 
