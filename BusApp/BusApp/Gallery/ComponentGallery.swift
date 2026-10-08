@@ -8,7 +8,7 @@ struct ComponentGallery: View {
     @State private var searchText = ""
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section("#2 · RouteBadge") {
                     HStack(spacing: Spacing.s) {
