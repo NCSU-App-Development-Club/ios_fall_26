@@ -47,6 +47,17 @@ struct ComponentGallery: View {
                 Section("#7 · SearchBar") {
                     SearchBar(text: $searchText)
                 }
+
+                Section("#15 · SectionHeader") {
+                    SectionHeader(title: "Nearby stops", actionTitle: "See all") {}
+                    SectionHeader(title: "Favorites")
+                }
+
+                Section("Screens · tap to open") {
+                    NavigationLink("#16 · Stop Detail") { StopDetailView(stop: .sampleNear) }
+                    NavigationLink("#17 · Route Detail") { RouteDetailView(route: .sample40) }
+                    NavigationLink("#18 · Search") { SearchView() }
+                }
             }
             .navigationTitle("Components")
         }

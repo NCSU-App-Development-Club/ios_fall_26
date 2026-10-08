@@ -21,3 +21,27 @@ extension Stop {
 
     static let samples: [Stop] = [.sampleNear, .sampleFar, .sampleNoDistance]
 }
+
+extension Arrival {
+    static let samples: [Arrival] = [
+        Arrival(id: "a1", route: .sample40,   stop: .sampleNear,       minutes: 0,  crowd: .some),
+        Arrival(id: "a2", route: .sample3,    stop: .sampleNear,       minutes: 12, crowd: .full),
+        Arrival(id: "a3", route: .sample40,   stop: .sampleNear,       minutes: 25, crowd: .empty),
+        Arrival(id: "a4", route: .sample41,   stop: .sampleFar,        minutes: 5,  crowd: .empty),
+        Arrival(id: "a5", route: .sample40,   stop: .sampleFar,        minutes: 8,  crowd: .some),
+        Arrival(id: "a6", route: .sample40,   stop: .sampleNoDistance, minutes: 14, crowd: .full),
+        Arrival(id: "a7", route: .sampleLong, stop: .sampleNoDistance, minutes: 65, crowd: .empty),
+    ]
+
+    /// Every sample arrival at one stop, soonest first.
+    /// e.g. `Arrival.at(.sampleNear)`
+    static func at(_ stop: Stop) -> [Arrival] {
+        samples.filter { $0.stop == stop }.sorted { $0.minutes < $1.minutes }
+    }
+
+    /// Every sample arrival on one route, soonest first.
+    /// e.g. `Arrival.on(.sample40)`
+    static func on(_ route: Route) -> [Arrival] {
+        samples.filter { $0.route == route }.sorted { $0.minutes < $1.minutes }
+    }
+}
