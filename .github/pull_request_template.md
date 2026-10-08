@@ -12,6 +12,7 @@ Closes #<!-- issue number -->
 ## Checklist
 - [ ] It builds and runs (⌘R)
 - [ ] I only changed my issue's file
+- [ ] `project.pbxproj` is **not** in "Files changed" (Team stays **None** in Xcode)
 - [ ] No hardcoded data — it uses what's passed in
 - [ ] No outer padding/background/fixed width on the whole component
 - [ ] My `#Preview` shows every state
