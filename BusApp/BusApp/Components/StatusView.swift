@@ -12,35 +12,28 @@ struct StatusView: View {
     let message: String
 
     var body: some View {
-        VStack {
-            
+        VStack(spacing: Spacing.s) {
             Image(systemName: systemImage)
-                .padding()
+                .font(.largeTitle)
             Text(title)
-                .bold()
-            Spacer()
+                .font(.headline)
+                .padding(10)
+                .frame(width:500)
+                .cornerRadius(40)
             Text(message)
                 .multilineTextAlignment(.center)
-        }
-        PlaceholderBox("StatusView: \(title)")
+                .foregroundStyle(.secondary)
+                
+        } .padding(.horizontal,Spacing.s)
+            
     }
        
 }
-#Preview {
-    struct PreviewWrapper: View {
-        @State private var text = ""
-        var body: some View {
-            SearchBar(text: $text)
-        }
-    }
-    return PreviewWrapper()
+
+#Preview("Empty") {
+    StatusView(systemImage: "bus", title: "No buses right now", message: "Nothing is scheduled for this stop. Check back later.")
 }
-//
-//
-//#Preview("Empty") {
-//    StatusView(systemImage: "bus", title: "No buses right now", message: "Nothing is scheduled for this stop. Check back later.")
-//}
-//
-//#Preview("Error") {
-//    StatusView(systemImage: "wifi.slash", title: "Couldn't load arrivals", message: "Check your connection and try again.")
-//}
+
+#Preview("Error") {
+    StatusView(systemImage: "wifi.slash", title: "Couldn't load arrivals", message: "Check your connection and try again.")
+}
