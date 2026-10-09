@@ -12,9 +12,22 @@ struct StatusView: View {
     let message: String
 
     var body: some View {
-        // TODO (Issue #5): Replace this placeholder with the real status view.
-        PlaceholderBox("StatusView: \(title)")
+        VStack(spacing: Spacing.s) {
+            Image(systemName: systemImage)
+                .font(.largeTitle)
+            Text(title)
+                .font(.headline)
+                .padding(10)
+                .frame(width:500)
+                .cornerRadius(40)
+            Text(message)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.secondary)
+                
+        } .padding(.horizontal,Spacing.s)
+            
     }
+       
 }
 
 #Preview("Empty") {
