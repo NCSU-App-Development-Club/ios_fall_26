@@ -47,6 +47,54 @@ struct ComponentGallery: View {
                 Section("#7 · SearchBar") {
                     SearchBar(text: $searchText)
                 }
+
+                Section("#15 · SectionHeader") {
+                    SectionHeader(title: "Saved Routes", actionTitle: "See All") {}
+                    SectionHeader(title: "Recents")
+                }
+
+                Section("#27 · GlassIconButton") {
+                    HStack(spacing: Spacing.m) {
+                        GlassIconButton(systemImage: "bell", showsBadge: true) {}
+                        GlassIconButton(systemImage: "person") {}
+                        GlassIconButton(systemImage: "info.circle") {}
+                        GlassIconButton(systemImage: "location.fill", tint: .ncsuRed) {}
+                    }
+                }
+
+                Section("#28 · RoutesButton") {
+                    RoutesButton {}
+                }
+
+                Section("#29 · TripStepChip") {
+                    HStack(spacing: Spacing.s) {
+                        ForEach(TripStep.samples) { step in
+                            TripStepChip(step: step)
+                        }
+                    }
+                }
+
+                Section("#30 · TimeToLeaveCard") {
+                    TimeToLeaveCard(trip: .sample) {}
+                }
+
+                Section("#31 · SavedRouteTile") {
+                    HStack(spacing: Spacing.s) {
+                        SavedRouteTile(route: .sample30, minutes: 4)
+                        SavedRouteTile(route: .sample40, minutes: 9)
+                        SavedRouteTile(route: .sample20, minutes: 12)
+                    }
+                }
+
+                Section("#32 · RecentRow") {
+                    ForEach(RecentPlace.samples) { place in
+                        RecentRow(place: place)
+                    }
+                }
+
+                Section("Screens · tap to open") {
+                    NavigationLink("#26 · Home") { HomeView() }
+                }
             }
             .navigationTitle("Components")
         }

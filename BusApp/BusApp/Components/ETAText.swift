@@ -30,8 +30,19 @@ struct ETAText: View {
         }
     } // <-- This closing brace was missing!
         
+    /// Plain text, so the screen using it picks the font and color,
+    /// e.g. `ETAText(minutes: 4).font(.footnote)`.
     var body: some View {
-        // TODO (Issue #6): Show `label` with the right styling.
-        PlaceholderBox("ETAText: \(label)")
+        Text(label)
     }
+}
+
+#Preview {
+    VStack(alignment: .leading, spacing: Spacing.s) {
+        ETAText(minutes: 0)
+        ETAText(minutes: 12)
+        ETAText(minutes: 60)
+        ETAText(minutes: 65)
+    }
+    .padding()
 }
