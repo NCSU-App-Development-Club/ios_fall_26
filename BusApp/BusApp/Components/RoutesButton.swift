@@ -1,3 +1,5 @@
+// xcode: set sdk=iOS
+
 import SwiftUI
 
 /// The big red "🚌 Routes" pill in Home's top-left corner.
@@ -8,13 +10,18 @@ struct RoutesButton: View {
     let action: () -> Void
 
     var body: some View {
-        // TODO (Issue #28): Replace this placeholder with the real button.
-        PlaceholderBox("RoutesButton")
+        Button(action: action) {
+            Label("Routes", systemImage: "bus")
+                .font(.headline)
+        }
+        .buttonStyle(.glassProminent)
+        .tint(Color.ncsuRed)
+        .controlSize(.large)
     }
 }
 
 #Preview {
     RoutesButton {}
         .padding()
-        .background(Color.groupedBackground)
+        .background(Color.white)
 }
