@@ -11,10 +11,21 @@ struct SectionHeader: View {
     var actionTitle: String? = nil
     /// What happens when the button is tapped.
     var action: (() -> Void)? = nil
+    
+    
 
     var body: some View {
-        // TODO (Issue #15): Replace this placeholder with the real header.
-        PlaceholderBox("SectionHeader: \(title)")
+        HStack(alignment: .firstTextBaseline){
+            Text(title)
+                .font(.title3)
+                .bold()
+            Spacer()
+            if let actionTitle, let action {
+                Button(actionTitle, action: action)
+                    .font(.subheadline)
+                    .tint(Color.ncsuRed)
+            }
+        }
     }
 }
 
