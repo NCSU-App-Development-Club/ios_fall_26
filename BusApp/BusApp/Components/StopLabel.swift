@@ -8,9 +8,19 @@ struct StopLabel: View {
     let stop: Stop
 
     var body: some View {
-        // TODO (Issue #3): Replace this placeholder with the real label.
-        // Careful: stop.distanceMeters is an Optional (Int?) — it can be nil!
-        PlaceholderBox("StopLabel: \(stop.name)")
+        HStack {
+            Image(systemName: "mappin.circle.fill")
+                .foregroundStyle(Color.ncsuRed)
+            VStack(alignment: .leading) {
+                Text(stop.name)
+                    .font(.headline)
+                if let distance = stop.distanceMeters {
+                    Text("\(distance) m away")
+                        .font(Font.footnote.monospacedDigit())
+                        .foregroundStyle(Color(.secondaryLabel))
+                }
+            }
+        }
     }
 }
 
