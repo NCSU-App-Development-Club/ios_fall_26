@@ -20,8 +20,9 @@ You should see the **Components** gallery. Gray dashed boxes are components nobo
 3. Open the file the issue names. Turn on the canvas (**⌥⌘↩**) so you see your preview live.
 4. Build it. Run it (**⌘R**). Break it, fix it.
 5. **Commit:** Source Control → Commit… → check only your file → write a message like `Build RouteBadge` → Commit.
-6. **Push:** Source Control → Push… (make sure it's pushing your issue branch, **not** `main`).
+6. **Push:** Source Control → Push… (make sure it's pushing your issue branch, **not** `main` or `development`).
 7. **Open a Pull Request** on GitHub: you'll see a yellow "Compare & pull request" banner. Fill in the template (add a screenshot!) and write `Closes #2` (your issue number).
+   - PRs go into **`development`** (GitHub picks it for you). Manish moves finished work into `main` after each demo.
 8. Move your issue to **Done** once your PR is opened. Manish reviews and merges.
 
 ## Rules for components (why they're built this way)
