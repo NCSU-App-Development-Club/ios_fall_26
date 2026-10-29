@@ -4,12 +4,15 @@ import SwiftUI
 ///
 /// 👉 Issue #44 — see the issue on GitHub for the picture, specs, and hints.
 struct StopDot: View {
-    /// The ring's color: the route this stop is on
+    var isSelected = false
     let color: Color
 
     var body: some View {
-        // TODO (Issue #44): Replace this placeholder with the real dot.
-        PlaceholderBox("StopDot")
+        Circle()
+            .fill(.white)
+            .frame(width: isSelected ? 14 : 8, height: isSelected ? 14 : 8)
+            .overlay {Circle().stroke(color, lineWidth: 2) }
+            
     }
 }
 
@@ -18,6 +21,8 @@ struct StopDot: View {
         StopDot(color: .routeIndigo)
         StopDot(color: .routeAqua)
         StopDot(color: .routeOrange)
+        StopDot(isSelected: true, color: .routeGreen)
+        
     }
     .padding()
     .background(Color.groupedBackground)
