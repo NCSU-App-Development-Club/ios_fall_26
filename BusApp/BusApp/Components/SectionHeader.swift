@@ -20,14 +20,18 @@ struct SectionHeader: View {
                 .font(.title3)
                 .bold()
             Spacer()
+            
             if let actionTitle, let action {
                 Button(actionTitle, action: action)
                     .font(.subheadline)
                     .tint(Color.ncsuRed)
             }
+            
+            
+            }
         }
     }
-}
+
 
 #Preview("With button") {
     SectionHeader(title: "Saved Routes", actionTitle: "See All") {
