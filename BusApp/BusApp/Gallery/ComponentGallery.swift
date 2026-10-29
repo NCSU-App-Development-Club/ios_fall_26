@@ -92,8 +92,37 @@ struct ComponentGallery: View {
                     }
                 }
 
+                Section("#43 · SheetHeader") {
+                    SheetHeader(title: "All Routes", detail: "11 routes · Fall 2026")
+                    SheetHeader(title: "Notifications")
+                }
+
+                Section("#44 · StopDot") {
+                    HStack(spacing: Spacing.m) {
+                        StopDot(color: .routeIndigo)
+                        StopDot(color: .routeAqua)
+                    }
+                }
+
+                Section("#45 · BusMarker") {
+                    HStack(spacing: Spacing.m) {
+                        BusMarker(route: .sample30)
+                        BusMarker(route: .sample40)
+                    }
+                }
+
+                Section("#47 · RouteGrid") {
+                    RouteGrid(statuses: RouteStatus.samples) { _ in }
+                }
+
+                Section("#48 · RoutesMap") {
+                    RoutesMap(lines: RouteLine.samples)
+                        .frame(height: 300)
+                }
+
                 Section("Screens · tap to open") {
                     NavigationLink("#26 · Home") { HomeView() }
+                    NavigationLink("#42 · Routes") { RoutesView() }
                 }
             }
             .navigationTitle("Components")
