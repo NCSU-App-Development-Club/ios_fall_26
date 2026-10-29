@@ -15,8 +15,24 @@ struct GlassIconButton: View {
     let action: () -> Void
 
     var body: some View {
-        // TODO (Issue #27): Replace this placeholder with the real button.
-        PlaceholderBox(systemImage)
+        Button(action: action) {Image(systemName:systemImage) .font(.title) .foregroundColor(tint)}
+            .buttonStyle(.plain)
+            .glassEffect(.regular, in:Circle())
+            .frame(width: 50, height: 50)
+        
+            .overlay(alignment: .topTrailing) {
+                if showsBadge {
+                    Circle()
+                        .fill(Color.ncsuRed)
+                        .frame(width:10, height: 10)
+                        .offset(x: -Radius.badge, y: Radius.badge)
+                    //var tint: Color = .white
+                }
+            }
+      
+
+
+        
     }
 }
 
