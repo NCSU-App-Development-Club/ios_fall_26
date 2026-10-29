@@ -21,6 +21,18 @@ extension Color {
     static let routeAqua   = Color(red: 0, green: 132 / 255, blue: 115 / 255)
     /// Figma "route/flame-orange" (#D14905)
     static let routeOrange = Color(red: 209 / 255, green: 73 / 255, blue: 5 / 255)
+    /// Figma "route/genomic-green" (#6F7D1C)
+    static let routeOlive  = Color(red: 111 / 255, green: 125 / 255, blue: 28 / 255)
+    /// Figma "route/innovation-blue" (#427E93)
+    static let routeSlate  = Color(red: 66 / 255, green: 126 / 255, blue: 147 / 255)
+    /// Figma "brand/reynolds-red" (#990000)
+    static let routeMaroon = Color(red: 153 / 255, green: 0, blue: 0)
+    /// Figma "brand/black"
+    static let routeBlack  = Color.black
+    /// Figma "route/hunt-yellow" (#FAC800). Too light for white text: see `Route.textColor`.
+    static let routeYellow = Color(red: 250 / 255, green: 200 / 255, blue: 0)
+    /// A route we don't know yet ("?" badge). Figma "label/secondary" (#8A8A8E)
+    static let routeUnknown = Color(red: 138 / 255, green: 138 / 255, blue: 142 / 255)
 
     // These two are Apple's system colors instead of fixed numbers, so they turn dark in Dark Mode.
     // (A fixed white card in Dark Mode gets white text on a white background.)

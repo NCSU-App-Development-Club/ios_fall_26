@@ -10,3 +10,11 @@ struct Route: Identifiable, Hashable {
     /// The route's color
     let color: Color
 }
+
+extension Route {
+    /// The color for text drawn on top of `color`, e.g. the number on a badge.
+    /// White on almost every route, black on the light yellow one.
+    var textColor: Color {
+        color == .routeYellow ? .black : .white
+    }
+}
