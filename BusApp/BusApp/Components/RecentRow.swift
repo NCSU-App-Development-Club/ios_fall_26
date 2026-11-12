@@ -10,7 +10,32 @@ struct RecentRow: View {
 
     var body: some View {
         // TODO (Issue #32): Replace this placeholder with the real row.
-        PlaceholderBox("RecentRow: \(place.name)")
+        
+        HStack(spacing: Spacing.ms){
+            
+            Image(systemName: "clock")
+                .font(.subheadline)
+                .foregroundStyle(.gray)
+                .frame(width: 32, height: 32)
+                .background(Color.groupedBackground, in: Circle())
+            
+            VStack(alignment: .leading){
+                Text(place.name)
+                    .font(.body)
+                Text(place.subtitle)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                
+                
+            }
+            Spacer()
+            
+            Image(systemName: "chevron.right")
+                .font(.footnote)
+                .foregroundStyle(.tertiary)
+            
+        }
+        .padding(.vertical, Spacing.ms)
     }
 }
 
