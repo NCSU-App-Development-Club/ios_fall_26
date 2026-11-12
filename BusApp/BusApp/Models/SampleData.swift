@@ -150,3 +150,54 @@ extension RouteLine {
         buses: []
     )
 }
+
+extension AppNotification {
+    /// The three in the Figma picture: 0, 3 and 12 minutes ago.
+    static let today: [AppNotification] = [
+        AppNotification(
+            id: "dwell-40", kind: .dwelling(.sample40),
+            title: "Route 40 is dwelling",
+            message: "Holding at Dunn Ave at Jeter Dr. Departure expected in about 2 min.",
+            date: .now
+        ),
+        AppNotification(
+            id: "moving-40", kind: .moving(.sample40),
+            title: "Route 40 is moving again",
+            message: "Now heading to College of Engineering. 4 min to your stop.",
+            date: .now.addingTimeInterval(-3 * 60)
+        ),
+        AppNotification(
+            id: "leave-ma242", kind: .timeToLeave,
+            title: "Time to leave for MA 242",
+            message: "Leave by 2:24 PM to catch Route 40 and arrive by 2:52 PM.",
+            date: .now.addingTimeInterval(-12 * 60)
+        ),
+    ]
+
+    /// Two from yesterday, so the list has a second group.
+    static let yesterday: [AppNotification] = [
+        AppNotification(
+            id: "leave-csc216", kind: .timeToLeave,
+            title: "Time to leave for CSC 216",
+            message: "Leave by 9:50 AM to catch Route 30 and arrive by 10:10 AM.",
+            date: Calendar.current.date(byAdding: .day, value: -1, to: .now)!
+        ),
+        AppNotification(
+            id: "moving-30", kind: .moving(.sample30),
+            title: "Route 30 is moving again",
+            message: "Now heading to Talley Student Union. 6 min to your stop.",
+            date: Calendar.current.date(byAdding: .day, value: -1, to: .now)!.addingTimeInterval(-40 * 60)
+        ),
+    ]
+
+    /// Everything, newest first. This is what the Notifications screen shows.
+    static let samples: [AppNotification] = today + yesterday
+
+    /// A long title and message, to check that text wraps instead of getting cut off.
+    static let sampleLong = AppNotification(
+        id: "dwell-20-long", kind: .dwelling(.sample20),
+        title: "Route 20 is holding longer than usual",
+        message: "Waiting at Centennial Campus Middle School for a driver change. Departure expected in about 8 min. We'll tell you when it moves.",
+        date: .now.addingTimeInterval(-95 * 60)
+    )
+}
