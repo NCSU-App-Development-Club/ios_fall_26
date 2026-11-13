@@ -15,13 +15,33 @@ struct TimeAgoText: View {
     /// TODO (Issue #62): Return the right text for `minutes`.
     /// Right now it just returns the raw number — fix it!
     var label: String {
-        "\(minutes)"
+        switch minutes {
+            case 0: "now"
+            case 1..<60: "\(minutes)m"
+            case 60..<(24*60): "\(minutes/60)h"
+            default:"\(minutes/(24*60))d"
+            
+        }
+        
+    }
+    
+    var accessibilityLabel: String {
+        switch minutes {
+        case 0: "now"
+        case 1: "\(minutes) minute ago"
+        case 2..<60: "\(minutes) minutes ago"
+        case 60..<(60*2): "\(minutes/60) hour ago"
+        case 60*2..<(24*60): "\(minutes/60) hours ago"
+        case 24*60..<(2*24*60): "\(minutes/(24*60)) day ago"
+        default:"\(minutes/(24*60)) days ago"
+        }
     }
 
     /// Plain text, so the screen using it picks the font and color,
     /// e.g. `TimeAgoText(minutes: 3).font(.footnote)`.
     var body: some View {
         Text(label)
+            .accessibilityLabel(accessibilityLabel)
     }
 }
 
