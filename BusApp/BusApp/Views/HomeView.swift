@@ -28,7 +28,7 @@ struct HomeView: View {
     private static let campus = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 35.7847, longitude: -78.6821),
         span: MKCoordinateSpan(latitudeDelta: 0.015, longitudeDelta: 0.015)
-    )
+    ) // replace with current location?
 
     var body: some View {
         ZStack {
