@@ -11,8 +11,19 @@ struct NotificationsView: View {
     var onClose: () -> Void = {}
 
     var body: some View {
-        // TODO (Issue #65): Replace this placeholder with the real screen.
-        PlaceholderBox("NotificationsView")
+        VStack(alignment: .leading, spacing: Spacing.s) {
+            HStack() {
+                SheetHeader(title: "Notifications")
+                GlassIconButton(systemImage: "xmark", action: onClose)
+            }
+            .padding(.horizontal, Spacing.m)
+            .padding(.top, Spacing.l)
+        }
+        ScrollView {
+            NotificationList(notifications: AppNotification.samples)
+                .padding()
+        }
+        .scrollIndicators(.hidden)
     }
 }
 
