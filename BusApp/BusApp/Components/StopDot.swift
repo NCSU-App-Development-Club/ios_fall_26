@@ -2,7 +2,7 @@ import SwiftUI
 
 /// The small white dot with a colored ring that marks a bus stop on the map.
 ///
-/// 👉 Issue #44 — see the issue on GitHub for the picture, specs, and hints.
+/// - SeeAlso: GitHub issue #44 for the picture and specs.
 struct StopDot: View {
     /// The ring's color: the route this stop is on
     let color: Color

@@ -1,12 +1,16 @@
-// xcode: set sdk=iOS
-
 import SwiftUI
 
 /// The big red "🚌 Routes" pill in Home's top-left corner.
 ///
-/// 👉 Issue #28 — see the issue on GitHub for the picture, specs, and hints.
+/// A prominent Liquid Glass button tinted ``SwiftUI/Color/ncsuRed``.
+///
+/// ```swift
+/// RoutesButton { showRoutes = true }
+/// ```
+///
+/// - SeeAlso: GitHub issue #28 for the picture and specs.
 struct RoutesButton: View {
-    /// What happens when it's tapped
+    /// Called when the button is tapped.
     let action: () -> Void
 
     var body: some View {

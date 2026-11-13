@@ -2,7 +2,7 @@ import SwiftUI
 
 /// A bus on the map: a circle in the route's color with a white bus icon and a white ring.
 ///
-/// 👉 Issue #45 — see the issue on GitHub for the picture, specs, and hints.
+/// - SeeAlso: GitHub issue #45 for the picture and specs.
 struct BusMarker: View {
     let route: Route
 

@@ -1,34 +1,38 @@
 import SwiftUI
 
 /// The big card at the top of Home: when to leave for your next class, and how to get there.
-///   TIME TO LEAVE                     MA 242 · 3:00 PM
-///   Leave in 6 min                          [ Go ]
-///   Route 40 · Dunn Ave @ Jeter Dr
-///   [🚶 4 min] › [🚌 40 · 9 min] › [🚶 2 min]
 ///
-/// 👉 Issue #30 — see the issue on GitHub for the picture, specs, and hints.
+/// ```
+/// TIME TO LEAVE                     MA 242 · 3:00 PM
+/// Leave in 6 min                          [ Go ]
+/// Route 40 · Dunn Ave @ Jeter Dr
+/// [🚶 4 min] › [🚌 40 · 9 min] › [🚶 2 min]
+/// ```
+///
+/// When ``TimeToLeave/leaveInMinutes`` is `0` the headline reads "Leave now"
+/// with "now" in red. The bottom row is one ``TripStepChip`` per leg.
+///
+/// - SeeAlso: GitHub issue #30 for the picture and specs.
 struct TimeToLeaveCard: View {
+    /// The class, route, stop, and trip legs to show.
     let trip: TimeToLeave
     /// What happens when "Go" is tapped
     let onGo: () -> Void
     //Ex: Route 40 · Dunn Ave @ Jeter Dr (description)
-    var description : String{ "Route \(trip.route.number) · \(trip.stop.name)"}
+    var description: String { "Route \(trip.route.number) · \(trip.stop.name)" }
     // Ex: Leave in 6 min, or Leave now (with "now" in red) when it's time to go
-    var leaveIn : Text{
+    var leaveIn: Text {
         if trip.leaveInMinutes == 0 {
             return Text("Leave \(Text("now").foregroundStyle(Color.ncsuRed))")
         }
         return Text("Leave in \(ETAText(minutes: trip.leaveInMinutes).label)")
     }
     // MA 242 * 3:00PM right side of eyebrow
-    var eyebrowLocation : String{"\(trip.className) · \(trip.classTime)"
-    }
-    
-    
+    var eyebrowLocation: String { "\(trip.className) · \(trip.classTime)" }
+
     var body: some View {
-        // TODO (Issue #30): Replace this placeholder with the real card.
-        VStack(alignment: .leading, spacing: Spacing.ms){
-            HStack{
+        VStack(alignment: .leading, spacing: Spacing.ms) {
+            HStack {
                 Label("TIME TO LEAVE", systemImage: "clock")
                     .font(.caption)
                     .fontWeight(.semibold)
@@ -39,19 +43,19 @@ struct TimeToLeaveCard: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
-            
+
             HStack {
                 VStack(alignment: .leading) {
                     leaveIn
                         .font(.title2)
                         .bold()
-                    
+
                     Text(description)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                Button(action: onGo){
+                Button(action: onGo) {
                     Text("Go")
                         .font(.headline)
                         .foregroundStyle(.white)
@@ -60,7 +64,7 @@ struct TimeToLeaveCard: View {
                         .background(Color.ncsuRed, in: Capsule())
                 }
             }
-            
+
             HStack(spacing: Spacing.xs) {
                 ForEach(trip.steps) { step in
                     // Chevron goes between chips, so skip it before the first one
@@ -77,6 +81,7 @@ struct TimeToLeaveCard: View {
         .background(Color.cardBackground, in: RoundedRectangle(cornerRadius: Radius.card))
     }
 }
+
 #Preview {
     VStack(spacing: Spacing.m) {
         TimeToLeaveCard(trip: .sample) {}

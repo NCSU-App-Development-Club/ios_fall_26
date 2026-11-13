@@ -4,7 +4,7 @@ import SwiftUI
 ///   All Routes                11 routes · Fall 2026
 /// Routes uses it now. Notifications and Feedback will use it later.
 ///
-/// 👉 Issue #43 — see the issue on GitHub for the picture, specs, and hints.
+/// - SeeAlso: GitHub issue #43 for the picture and specs.
 struct SheetHeader: View {
     let title: String
     /// The gray text on the right. Leave it out for none.

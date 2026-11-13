@@ -3,7 +3,7 @@ import SwiftUI
 /// A bus stop's name with a pin icon, and how far away it is (if we know).
 /// Used anywhere the app shows a stop.
 ///
-/// 👉 Issue #3 — see the issue on GitHub for the wireframe, specs, and hints.
+/// - SeeAlso: GitHub issue #3 for the wireframe and specs.
 struct StopLabel: View {
     let stop: Stop
 
