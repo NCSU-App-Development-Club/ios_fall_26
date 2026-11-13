@@ -11,8 +11,16 @@ struct SheetHeader: View {
     var detail: String? = nil
 
     var body: some View {
-        // TODO (Issue #43): Replace this placeholder with the real header.
-        PlaceholderBox("SheetHeader: \(title)")
+        HStack(alignment: .firstTextBaseline) {
+            Text(title)
+                .font(.title2.bold())
+            Spacer()
+            if let detail {
+                Text(detail)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
     }
 }
 
