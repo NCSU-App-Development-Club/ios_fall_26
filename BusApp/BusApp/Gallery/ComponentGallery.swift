@@ -24,12 +24,6 @@ struct ComponentGallery: View {
                     }
                 }
 
-                Section("#4 · CrowdMeter") {
-                    ForEach(CrowdLevel.allCases) { level in
-                        CrowdMeter(level: level)
-                    }
-                }
-
                 Section("#5 · StatusView") {
                     StatusView(
                         systemImage: "bus",

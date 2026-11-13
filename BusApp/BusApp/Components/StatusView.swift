@@ -4,7 +4,7 @@ import SwiftUI
 /// "No buses right now", "Couldn't load arrivals", etc.
 /// Every screen that loads data will need one of these.
 ///
-/// 👉 Issue #5 — see the issue on GitHub for the wireframe, specs, and hints.
+/// - SeeAlso: GitHub issue #5 for the wireframe and specs.
 struct StatusView: View {
     /// An SF Symbol name, e.g. "bus" or "wifi.slash"
     let systemImage: String

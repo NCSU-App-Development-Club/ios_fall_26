@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Every route as a tile, three to a row. The main part of the Routes screen.
 ///
-/// 👉 Issue #47 — see the issue on GitHub for the picture, specs, and hints.
+/// - SeeAlso: GitHub issue #47 for the picture and specs.
 struct RouteGrid: View {
     /// One tile per status, in this order
     let statuses: [RouteStatus]

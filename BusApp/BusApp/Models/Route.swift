@@ -2,6 +2,7 @@ import SwiftUI
 
 /// A bus route, e.g. route "40" (Wolfline) shown in blue.
 struct Route: Identifiable, Hashable {
+    /// Stable unique key, e.g. `"40"`.
     let id: String
     /// Short label shown on the badge, e.g. "40"
     let number: String

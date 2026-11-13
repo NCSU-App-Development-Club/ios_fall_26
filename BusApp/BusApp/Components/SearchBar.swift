@@ -1,38 +1,41 @@
 import SwiftUI
 
 /// A search field for finding stops and places: 🔍 [ Search…      ⓧ ]
-/// It doesn't own the text — the screen that uses it does, and passes it in
-/// as a Binding (that's what the `$` is for).
 ///
-/// 👉 Issue #7 — see the issue on GitHub for the wireframe, specs, and hints.
+/// It doesn't own the text. The screen that uses it does, and passes it in
+/// as a `Binding` (that's what the `$` is for). The ⓧ button appears once
+/// there's text and clears it.
+///
+/// ```swift
+/// @State private var query = ""
+/// SearchBar(text: $query)
+/// ```
+///
+/// - SeeAlso: GitHub issue #7 for the wireframe and specs.
 struct SearchBar: View {
+    /// The text in the field, owned by the parent view.
     @Binding var text: String
+    /// Gray hint shown while the field is empty.
     var placeholder: String = "Search for a stop or place"
 
     var body: some View {
-        // TODO (Issue #7): Replace this placeholder with the real search bar.
-        HStack(){
-            
+        HStack {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(.secondary)
-            
-            TextField(
-                placeholder,
-                text : $text)
-            if (text != "") {
+
+            TextField(placeholder, text: $text)
+
+            if !text.isEmpty {
                 Button {
                     text = ""
-                }
-                label: {
+                } label: {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundStyle(.secondary)
-
                 }
             }
-            
         }
         .padding()
-        .overlay(Capsule().stroke(.gray, lineWidth: 1))
+        .glassEffect(.regular.interactive(), in: Capsule())
     }
 }
 
