@@ -10,8 +10,27 @@ struct NotificationRow: View {
     let notification: AppNotification
 
     var body: some View {
-        // TODO (Issue #63): Replace this placeholder with the real row.
-        PlaceholderBox("NotificationRow: \(notification.title)")
+        HStack(alignment: .top, spacing: Spacing.ms) {
+            NotificationIcon(kind: notification.kind)
+
+            VStack(alignment: .leading, spacing: Spacing.xs) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text(notification.title)
+                        .font(.callout.weight(.semibold))
+                    Spacer()
+                    TimeAgoText(minutes: notification.minutesAgo)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+
+                Text(notification.message)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(Spacing.ms)
+        .background(Color.cardBackground, in: RoundedRectangle(cornerRadius: Radius.row))
+        .accessibilityElement(children: .combine)
     }
 }
 
