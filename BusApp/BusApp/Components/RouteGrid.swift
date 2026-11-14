@@ -8,11 +8,22 @@ struct RouteGrid: View {
     let statuses: [RouteStatus]
     /// What happens when a tile is tapped. You're given the route that was tapped.
     let onSelect: (Route) -> Void
+    
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: Spacing.s), count: 3)
 
     var body: some View {
-        // TODO (Issue #47): Replace this placeholder with the real grid.
-        // Reuse SavedRouteTile (#31). Don't rebuild it!
-        PlaceholderBox("RouteGrid: \(statuses.count) routes")
+        LazyVGrid(columns: columns, spacing: Spacing.s) {
+            ForEach(statuses) { status in
+                if let minutes = status.minutes {
+                    Button {
+                        onSelect(status.route)
+                    } label: {
+                        SavedRouteTile(route: status.route, minutes: minutes)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
     }
 }
 
