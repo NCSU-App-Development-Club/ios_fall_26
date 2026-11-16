@@ -2,6 +2,9 @@ import SwiftUI
 
 /// Every route as a tile, three to a row. The main part of the Routes screen.
 ///
+/// Routes with no bus right now (a status whose `minutes` is `nil`) still get
+/// a tile; ``SavedRouteTile`` shows them as "— min".
+///
 /// - SeeAlso: GitHub issue #47 for the picture and specs.
 struct RouteGrid: View {
     /// One tile per status, in this order
@@ -14,14 +17,12 @@ struct RouteGrid: View {
     var body: some View {
         LazyVGrid(columns: columns, spacing: Spacing.s) {
             ForEach(statuses) { status in
-                if let minutes = status.minutes {
-                    Button {
-                        onSelect(status.route)
-                    } label: {
-                        SavedRouteTile(route: status.route, minutes: minutes)
-                    }
-                    .buttonStyle(.plain)
+                Button {
+                    onSelect(status.route)
+                } label: {
+                    SavedRouteTile(route: status.route, minutes: status.minutes)
                 }
+                .buttonStyle(.plain)
             }
         }
     }
