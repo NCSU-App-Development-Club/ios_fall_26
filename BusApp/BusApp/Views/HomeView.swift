@@ -12,37 +12,54 @@ import MapKit
 ///    dragged to full height, and leaves the map usable behind it.
 ///
 /// This view only arranges components; each one is styled in its own file.
-/// Buttons have empty actions for now.
+/// The Routes button fades the map and buttons over to ``RoutesView`` and
+/// raises ``RoutesSheet`` on top of Home's own sheet. Swiping that sheet down,
+/// tapping outside it, or tapping Routes again closes it. The other buttons
+/// have empty actions for now.
 ///
-/// - SeeAlso: GitHub issue #34 for the specs, and issue #26 for the list of
-///   components this screen uses.
+/// - SeeAlso: GitHub issue #34 for the specs, issue #26 for the list of
+///   components this screen uses, and issue #50 for the Routes hookup.
 struct HomeView: View {
     /// Keeps the bottom sheet on screen. It's never set to `false`.
     @State private var showsSheet = true
     /// The text typed into the search bar.
     @State private var searchText = ""
-    /// How tall the sheet is right now, so the search row can sit just above it.
+    /// How tall Home's sheet is right now, so the search row can sit just above it.
     @State private var sheetHeight: CGFloat = 0
-
-    /// The middle of NC State's main campus.
-    private static let campus = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 35.7847, longitude: -78.6821),
-        span: MKCoordinateSpan(latitudeDelta: 0.015, longitudeDelta: 0.015)
-    ) // replace with current location?
+    /// Whether Routes is open: its map and buttons replace Home's, and its
+    /// sheet sits on top of Home's sheet.
+    @State private var showRoutes = false
 
     var body: some View {
         ZStack {
-            Map(initialPosition: .region(Self.campus))
-                .ignoresSafeArea()
-
-            VStack {
-                topButtons
-                Spacer()
-                searchRow
-                    .padding(.bottom, sheetHeight)
+            // Two whole screens; `.animation` plus `.transition` fades between them.
+            if showRoutes {
+                // The Routes sheet comes from Home's sheet below, not from RoutesView.
+                RoutesView(presentsSheet: false, onClose: {
+                    showRoutes = false
+                })
+                .transition(.opacity)
             }
-            .padding(.horizontal, Spacing.m)
+            else {
+                ZStack {
+                    // Same region as the Routes map, so the map doesn't jump on the swap.
+                    Map(initialPosition: .region(.campus))
+                        .ignoresSafeArea()
+                    
+                    VStack {
+                        topButtons
+                        Spacer()
+                        searchRow
+                            .padding(.bottom, sheetHeight)
+                    }
+                    .padding(.horizontal, Spacing.m)
+                }
+                .transition(.opacity)
+            }
         }
+        // Fades on every change of `showRoutes`, including when the system sets
+        // it to `false` because the Routes sheet was swiped or tapped away.
+        .animation(.default, value: showRoutes)
         .sheet(isPresented: $showsSheet) {
             sheetContent
                 .onGeometryChange(for: CGFloat.self) { proxy in
@@ -53,19 +70,27 @@ struct HomeView: View {
                 .presentationDetents([.medium, .large])
                 .interactiveDismissDisabled()
                 .presentationBackgroundInteraction(.enabled(upThrough: .medium))
+                // A sheet presented from inside a sheet stacks on top of it,
+                // so Home's sheet stays where it is underneath. It can be
+                // dismissed the usual ways: swipe down, or tap outside it.
+                .sheet(isPresented: $showRoutes) {
+                    RoutesSheet()
+                }
         }
     }
-
+    
     /// Routes on the left; notifications and profile on the right.
     private var topButtons: some View {
         HStack {
-            RoutesButton {}
+            RoutesButton {
+                showRoutes = true
+            }
             Spacer()
             GlassIconButton(systemImage: "bell", showsBadge: true) {}
             GlassIconButton(systemImage: "person") {}
         }
     }
-
+    
     /// Feedback, search, and re-pin location, in one row above the sheet.
     private var searchRow: some View {
         HStack(spacing: Spacing.s) {
@@ -75,20 +100,20 @@ struct HomeView: View {
         }
         .padding(.bottom, Spacing.s)
     }
-
+    
     /// Everything inside the bottom sheet, scrolling top to bottom.
     private var sheetContent: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.m) {
                 TimeToLeaveCard(trip: .sample) {}
-
+                
                 SectionHeader(title: "Saved Routes", actionTitle: "See All") {}
                 HStack(spacing: Spacing.s) {
                     SavedRouteTile(route: .sample30, minutes: 4)
                     SavedRouteTile(route: .sample40, minutes: 9)
                     SavedRouteTile(route: .sample20, minutes: 12)
                 }
-
+                
                 SectionHeader(title: "Recents")
                 recentsCard
             }
@@ -97,7 +122,7 @@ struct HomeView: View {
             .padding(.bottom, Spacing.s)
         }
     }
-
+    
     /// One white card holding every recent place, with a line between rows.
     private var recentsCard: some View {
         VStack(spacing: 0) {

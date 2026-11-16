@@ -16,7 +16,7 @@ struct SearchBar: View {
     /// The text in the field, owned by the parent view.
     @Binding var text: String
     /// Gray hint shown while the field is empty.
-    var placeholder: String = "Search for a stop or place"
+    var placeholder: String = "Search"
 
     var body: some View {
         HStack {

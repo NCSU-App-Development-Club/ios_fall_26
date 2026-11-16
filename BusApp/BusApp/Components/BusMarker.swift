@@ -7,8 +7,14 @@ struct BusMarker: View {
     let route: Route
 
     var body: some View {
-        // TODO (Issue #45): Replace this placeholder with the real marker.
-        PlaceholderBox("BusMarker \(route.number)")
+        Image(systemName: "bus.fill")
+            .font(.caption.bold())
+            .foregroundStyle(route.textColor)
+            .frame(width: 26, height:26)
+            .background(route.color, in: Circle())
+            .shadow(radius: 2)
+            .overlay {Circle().stroke(.white, lineWidth: 2)}
+            //.shadow(radius: 2)
     }
 }
 
