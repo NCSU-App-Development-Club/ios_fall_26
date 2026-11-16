@@ -66,6 +66,8 @@ enum Radius {
     static let badge: CGFloat = 8
     /// Saved Route tiles
     static let tile:  CGFloat = 20
+    /// Notification rows
+    static let row:   CGFloat = 22
     /// Big cards: Time to Leave, the Recents list
     static let card:  CGFloat = 24
 }
