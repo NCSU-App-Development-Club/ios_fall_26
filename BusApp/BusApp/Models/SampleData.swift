@@ -21,6 +21,26 @@ extension Route {
     static let saved: [Route] = [.sample30, .sample40, .sample20]
 
     // The rest of the routes on the Routes screen. "Name TBD" until the designers pick names.
+    //
+    // What the real Wolfline looks like, for whoever fills these in (checked November 2026
+    // against NC State Transportation's Fall 2026 schedules page,
+    // https://transportation.ncsu.edu/wolfline/wolfline-schedules/):
+    //
+    // - Wolfline routes have no official names, only a number and a short description.
+    // - Fall 2026 has nine weekday routes: 20, 30, 40, 41, 42, 43, 51, 52, 60. Route 50 was removed.
+    //   So the two "?" routes below match no real route.
+    // - Official descriptions:
+    //     20  Spring Hill Park & Ride
+    //     30  Main Campus East-West Connector
+    //     40  Connecting Centennial Campus & Main Campus
+    //     41  Connecting Centennial Campus & Main Campus
+    //     42  Centennial Campus Circulator
+    //     43  Connecting Centennial Campus & Main Campus
+    //     51  Serving Varsity Lot & McKimmon Center
+    //     52  Serving Gorman Street & Main Campus
+    //     60  Serving Carter-Finley Park & Ride & Centennial Biomedical Campus
+    // - The names above for 20 ("Centennial") and 41 ("Avent Ferry") are placeholders too:
+    //   they don't match those routes' descriptions.
     static let sample42 = Route(id: "42", number: "42", name: "Name TBD", color: .routeSlate)
     static let sample43 = Route(id: "43", number: "43", name: "Name TBD", color: .routeMaroon)
     static let sample51 = Route(id: "51", number: "51", name: "Name TBD", color: .routeBlack)
