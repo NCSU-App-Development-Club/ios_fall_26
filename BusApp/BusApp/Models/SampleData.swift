@@ -1,5 +1,6 @@
 import SwiftUI
 import CoreLocation
+import MapKit
 
 // MARK: - Fake data
 //
@@ -148,5 +149,15 @@ extension RouteLine {
         ],
         stops: [],
         buses: []
+    )
+}
+
+extension MKCoordinateRegion {
+    /// Where every map starts: the part of campus the fake ``RouteLine/samples`` run through.
+    /// Home and Routes share it, so the map doesn't jump when you switch screens.
+    /// The centre sits a little south of the lines so they show above the bottom sheet.
+    static let campus = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: 35.7800, longitude: -78.6690), // replace with current location?
+        span: MKCoordinateSpan(latitudeDelta: 0.012, longitudeDelta: 0.012)
     )
 }

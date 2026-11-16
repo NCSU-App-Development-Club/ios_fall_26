@@ -5,14 +5,10 @@ import MapKit
 struct RoutesMap: View {
     let lines: [RouteLine]
     
-    private let campus = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 35.7800, longitude: -78.6690), // replace with current location?
-        span: MKCoordinateSpan(latitudeDelta: 0.012, longitudeDelta: 0.012)
-    )
-    
     var body: some View {
         // Reuse BusMarker and StopDot for the buses and stops.
-        Map(initialPosition: .region(campus)){
+        // Starts on the same region as Home's map.
+        Map(initialPosition: .region(.campus)){
             ForEach(lines) { line in
                 MapPolyline(coordinates: line.path).stroke(line.route.color, lineWidth: 4)
                 ForEach(line.stops){stop in
