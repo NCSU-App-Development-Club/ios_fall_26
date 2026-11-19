@@ -6,6 +6,9 @@ import SwiftUI
 /// your component will automatically replace its placeholder here.
 struct ComponentGallery: View {
     @State private var searchText = ""
+    @State private var feedbackCategory = FeedbackCategory.bug
+    @State private var feedbackMessage = ""
+    @State private var feedbackContext = true
 
     var body: some View {
         NavigationStack {
@@ -138,10 +141,45 @@ struct ComponentGallery: View {
                     NotificationList(notifications: [])
                 }
 
+                Section("#103 · FeedbackCategoryChip") {
+                    HStack(spacing: Spacing.s) {
+                        FeedbackCategoryChip(category: .bug, isSelected: true)
+                        FeedbackCategoryChip(category: .idea, isSelected: false)
+                    }
+                }
+
+                Section("#104 · CategoryPicker") {
+                    CategoryPicker(selection: $feedbackCategory)
+                }
+
+                Section("#105 · MessageField") {
+                    MessageField(text: $feedbackMessage, placeholder: feedbackCategory.placeholder)
+                }
+
+                Section("#106 · ContextToggleRow") {
+                    ContextToggleRow(
+                        title: "Include route and location",
+                        subtitle: "Helps us reproduce the issue",
+                        isOn: $feedbackContext
+                    )
+                }
+
+                Section("#107 · PrimaryButton") {
+                    PrimaryButton(title: "Send Feedback") {}
+                    PrimaryButton(title: "Send Feedback", isLoading: true) {}
+                    PrimaryButton(title: "Send Feedback") {}
+                        .disabled(true)
+                }
+
+                Section("#108 · FeedbackSentView") {
+                    FeedbackSentView()
+                }
+
                 Section("Screens · tap to open") {
                     NavigationLink("#26 · Home") { HomeView() }
                     NavigationLink("#42 · Routes") { RoutesView() }
                     NavigationLink("#60 · Notifications") { NotificationsView() }
+                    NavigationLink("#102 · Feedback") { FeedbackView() }
                 }
             }
             .navigationTitle("Components")
