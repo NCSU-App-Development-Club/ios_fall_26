@@ -19,19 +19,32 @@ This is the contract between the app and the backend. The iOS app builds against
 | IDs | Strings, taken as-is from the Wolfline GTFS feed (`stop_id`, `route_id`). Never numbers. |
 | Cache keys | The CloudFront cache key is the **path only**. No query strings, headers or cookies change a response, so never design an endpoint around `?stop=`. |
 
-Every successful response carries two fields at the top level:
+Every successful response carries one field at the top level:
 
 | Field | Type | Meaning |
 |---|---|---|
 | `updatedAt` | integer | When the backend last got fresh data from Passio, in Unix seconds |
-| `stale` | boolean | `true` if `updatedAt` is too old to trust. The app should still show the data, with a "last updated" note. |
+
+### Staleness (decided)
+
+There is no `stale` flag. When Passio is down, the Lambda returns `502` and CloudFront serves its last cached copy of that response, with the original `updatedAt` inside it. The app decides whether the data is too old:
+
+- If `now - updatedAt` is more than 60 seconds, show the data with a "last updated" note.
+- Never hide data just because it is old. Old buses are better than a blank map.
+
+How it works on the backend:
+
+- Every cacheable response sends `Cache-Control: max-age=<ttl>, stale-if-error=3600`, so CloudFront may keep serving an expired copy for up to an hour while the backend is failing.
+- When Passio fails, the Lambda must return a real `5xx` status. A `200` with an error message inside would replace the good cached copy.
+- This is best effort. CloudFront keeps a copy per location and may drop copies nobody asked for, so some phones can still get the error. The app shows its error state when that happens.
+- The dev deploy issue must test this: break the Lambda on purpose and check that CloudFront serves the old copy.
 
 ## Endpoints at a glance
 
 | Endpoint | Cache | Notes |
 |---|---|---|
 | `GET /v1/vehicles` | 5 s | All buses |
-| `GET /v1/arrivals` | 5 s | Upcoming arrivals for every stop |
+| `GET /v1/arrivals` | 30 s | Upcoming arrivals for every stop |
 | `GET /v1/static` | 1 day | Routes and stops; the app re-downloads only when `version` changes |
 | `GET /v1/alerts` | 60 s | Service alerts |
 | `POST /v1/plan` | none | Which bus to take between two points |
@@ -50,7 +63,6 @@ Every bus currently reporting a position.
 ```json
 {
   "updatedAt": 1794530133,
-  "stale": false,
   "vehicles": [
     {
       "id": "13884",
@@ -81,7 +93,6 @@ Upcoming arrivals for **every stop** in one response, so every phone and every s
 ```json
 {
   "updatedAt": 1794530133,
-  "stale": false,
   "stops": {
     "4510": [
       { "routeId": "5647", "arrivalAt": 1794530400, "source": "live" },
@@ -100,13 +111,15 @@ Upcoming arrivals for **every stop** in one response, so every phone and every s
 
 `source` tells the app how much to trust the time:
 
-1. `live`: from Passio's live arrival endpoint.
+1. `live`: from Passio's live arrival endpoint (`eta=3`). Which entries in that response are truly live, and which are timetable rows, is not yet confirmed. See the open questions.
 2. `estimated`: our own estimate. How late the bus is right now (from `/v1/vehicles`), applied to the timetable.
 3. `scheduled`: straight from the timetable. The app labels these "Scheduled."
 
 The backend tries them in that order for each arrival. The public GTFS `tripUpdates` feed holds timetable times, not live predictions, so it only ever produces `scheduled`.
 
-Size about 7 KB for all stops.
+One request to Passio's live endpoint with all ~120 stop ids returns every stop (tested Nov 19, 2026: HTTP 200, about 3 s on the first call, 418 KB raw). The backend keeps only the fields above, which brings the response down to about 7 KB. Cached for 30 seconds because arrivals show in minutes.
+
+**Route ids:** in Passio's live response, `routeId` is a different id from GTFS (Route 20 is `74000` there and `5641` in GTFS). Its `routeGroupId` field matches GTFS. The backend must map from `routeGroupId`, so `routeId` here joins with `/v1/static`. Stop ids already match.
 
 ## `GET /v1/static`
 
@@ -115,7 +128,6 @@ Routes and stops. Changes about once a semester, so it is cached for a day and t
 ```json
 {
   "updatedAt": 1794500000,
-  "stale": false,
   "version": "2026-11-16",
   "routes": [
     {
@@ -148,7 +160,6 @@ Active service alerts, shown as banners.
 ```json
 {
   "updatedAt": 1794530100,
-  "stale": false,
   "alerts": [
     {
       "id": "1021",
@@ -188,7 +199,6 @@ Response:
 ```json
 {
   "updatedAt": 1794530133,
-  "stale": false,
   "legs": [
     {
       "routeId": "5647",
@@ -219,9 +229,8 @@ Switches the team can change without shipping a new app.
 ```json
 {
   "updatedAt": 1794530000,
-  "stale": false,
   "banner": null,
-  "pollSeconds": { "vehicles": 5, "arrivals": 15, "alerts": 60 },
+  "pollSeconds": { "vehicles": 5, "arrivals": 30, "alerts": 60 },
   "minAppVersion": "1.0.0",
   "features": {}
 }
@@ -274,10 +283,10 @@ Failures return a non-2xx status with this body, so the app can parse them one w
 |---|---|---|
 | 400 | `bad_request` | The request body is missing a field or has the wrong type |
 | 404 | `not_found` | Unknown path |
-| 502 | `upstream_failed` | Passio failed and there is nothing usable to return |
+| 502 | `upstream_failed` | Passio failed. CloudFront serves its last good copy instead when it has one (see Staleness). |
 | 500 | `internal` | A bug on our side |
 
-Error responses are never cached.
+Error responses are never stored as the cached copy.
 
 ## Rules
 
@@ -289,7 +298,7 @@ Error responses are never cached.
 
 These are not decided. Decide them in an issue before building the endpoint that depends on them.
 
-1. **Where does `stale` get its last good copy?** A Lambda keeps no state between calls. If Passio is down, either CloudFront serves its last cached copy (`stale-if-error`), or we store the last good response somewhere. Which one?
-2. **Does `/v1/arrivals` cover every stop in one call to Passio's live endpoint?** Passio's `eta=3` endpoint accepts several stops, but nobody has tried all ~120 in one request.
+1. **Which live entries are really live?** Some entries in Passio's response read "Service starts at 11:07 AM", which looks like a timetable row. Decide how the backend labels `source` for those.
+2. **Why do about 19 of 121 stops come back empty?** Probably no bus is due soon. Confirm during sample capture.
 3. **Route `shape` format.** Encoded polyline keeps `/v1/static` small. Is that decoding cost fine on the phone?
 4. **Will stop and route ids change between semesters?** Unconfirmed. The permission email to NC State Transportation asks.
