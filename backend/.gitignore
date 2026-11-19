@@ -1,0 +1,12 @@
+# SAM build output
+.aws-sam/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Local env and credentials — never commit these
+*.env
+env.json
+.aws/
+credentials

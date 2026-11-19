@@ -27,6 +27,7 @@ jobs:
           REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number }}
           BRANCH: ${{ github.event.pull_request.head.ref }}
+          BASE: ${{ github.event.pull_request.base.ref }}
           ALLOWED: ${{ contains(github.event.pull_request.labels.*.name, 'project-change-ok') }}
         run: |
           FILE="BusApp/BusApp.xcodeproj/project.pbxproj"
@@ -52,12 +53,12 @@ jobs:
           \`\`\`
           git switch $BRANCH
           git fetch origin
-          git checkout origin/main -- $FILE
-          git commit -m "Use main's project file"
+          git checkout origin/$BASE -- $FILE
+          git commit -m "Use $BASE's project file"
           git push
           \`\`\`
 
-          This puts back main's copy of the project file. Your Swift code is not touched. Once you push, this check re-runs and turns green.
+          This puts back \`$BASE\`'s copy of the project file. Your Swift code is not touched. Once you push, this check re-runs and turns green.
 
           **So it doesn't happen again:** in Xcode → BusApp target → Signing & Capabilities, keep **Team = None**, and don't click "Fix Issue" on the signing warning. The Simulator doesn't need a team.
           EOF

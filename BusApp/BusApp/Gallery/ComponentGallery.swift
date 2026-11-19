@@ -24,12 +24,6 @@ struct ComponentGallery: View {
                     }
                 }
 
-                Section("#4 · CrowdMeter") {
-                    ForEach(CrowdLevel.allCases) { level in
-                        CrowdMeter(level: level)
-                    }
-                }
-
                 Section("#5 · StatusView") {
                     StatusView(
                         systemImage: "bus",
@@ -92,8 +86,62 @@ struct ComponentGallery: View {
                     }
                 }
 
+                Section("#43 · SheetHeader") {
+                    SheetHeader(title: "All Routes", detail: "11 routes · Fall 2026")
+                    SheetHeader(title: "Notifications")
+                }
+
+                Section("#44 · StopDot") {
+                    HStack(spacing: Spacing.m) {
+                        StopDot(color: .routeIndigo)
+                        StopDot(color: .routeAqua)
+                    }
+                }
+
+                Section("#45 · BusMarker") {
+                    HStack(spacing: Spacing.m) {
+                        BusMarker(route: .sample30)
+                        BusMarker(route: .sample40)
+                    }
+                }
+
+                Section("#47 · RouteGrid") {
+                    RouteGrid(statuses: RouteStatus.samples) { _ in }
+                }
+
+                Section("#48 · RoutesMap") {
+                    RoutesMap(lines: RouteLine.samples)
+                        .frame(height: 300)
+                }
+
+                Section("#61 · NotificationIcon") {
+                    HStack(spacing: Spacing.m) {
+                        NotificationIcon(kind: .dwelling(.sample40))
+                        NotificationIcon(kind: .moving(.sample40))
+                        NotificationIcon(kind: .timeToLeave)
+                    }
+                }
+
+                Section("#62 · TimeAgoText") {
+                    ForEach([0, 3, 95, 1500], id: \.self) { minutes in
+                        TimeAgoText(minutes: minutes)
+                    }
+                }
+
+                Section("#63 · NotificationRow") {
+                    NotificationRow(notification: AppNotification.today[0])
+                    NotificationRow(notification: .sampleLong)
+                }
+
+                Section("#64 · NotificationList") {
+                    NotificationList(notifications: AppNotification.samples)
+                    NotificationList(notifications: [])
+                }
+
                 Section("Screens · tap to open") {
                     NavigationLink("#26 · Home") { HomeView() }
+                    NavigationLink("#42 · Routes") { RoutesView() }
+                    NavigationLink("#60 · Notifications") { NotificationsView() }
                 }
             }
             .navigationTitle("Components")

@@ -20,8 +20,9 @@ You should see the **Components** gallery. Gray dashed boxes are components nobo
 3. Open the file the issue names. Turn on the canvas (**⌥⌘↩**) so you see your preview live.
 4. Build it. Run it (**⌘R**). Break it, fix it.
 5. **Commit:** Source Control → Commit… → check only your file → write a message like `Build RouteBadge` → Commit.
-6. **Push:** Source Control → Push… (make sure it's pushing your issue branch, **not** `main`).
+6. **Push:** Source Control → Push… (make sure it's pushing your issue branch, **not** `main` or `development`).
 7. **Open a Pull Request** on GitHub: you'll see a yellow "Compare & pull request" banner. Fill in the template (add a screenshot!) and write `Closes #2` (your issue number).
+   - PRs go into **`development`** (GitHub picks it for you). Manish moves finished work into `main` after each demo.
 8. Move your issue to **Done** once your PR is opened. Manish reviews and merges.
 
 ## Rules for components (why they're built this way)
@@ -31,14 +32,14 @@ These components get reused on screens we haven't designed yet, so:
 - **No hardcoded data.** Show what's passed in (`route.number`), never `"40"`.
 - **No outer padding, background, or fixed width on the whole component.** The screen that uses it decides where it goes.
 - **Colors and sizes come from `Theme.swift`** (`Color.ncsuRed`, `Spacing.m`, `Radius.card`).
-- **Your `#Preview` shows every state** (every route, every crowd level, etc.).
+- **Your `#Preview` shows every state** (every route, with and without a bus, etc.).
 
 ## Project layout
 
 ```
 BusApp/BusApp/
 ├── Theme/        colors, spacing, radii
-├── Models/       Route, Stop, CrowdLevel + fake sample data
+├── Models/       Route, Stop, TripStep, … + fake sample data
 ├── Components/   one reusable view per file (one per issue)
 ├── Gallery/      ComponentGallery — shows every component
 └── ContentView   the app's root

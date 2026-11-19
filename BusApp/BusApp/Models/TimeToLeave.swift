@@ -10,6 +10,7 @@ struct TimeToLeave: Hashable {
     let classTime: String
     /// Minutes until the user should leave. 0 means leave now.
     let leaveInMinutes: Int
+    /// The bus route to catch.
     let route: Route
     /// The stop to catch the bus at
     let stop: Stop

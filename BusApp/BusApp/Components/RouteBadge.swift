@@ -1,16 +1,27 @@
 import SwiftUI
 
 /// A small colored badge showing a route number, e.g. [ 40 ].
-/// Used anywhere the app mentions a bus route.
 ///
-/// 👉 Issue #2 — see the issue on GitHub for the wireframe, specs, and hints.
+/// Used anywhere the app mentions a bus route. The background is the route's
+/// own color and the number uses ``Route/textColor`` (white, or black on yellow).
+///
+/// ```swift
+/// RouteBadge(route: .sample40)
+/// ```
+///
+/// - Author: Jonathan Sawyer
+/// - SeeAlso: GitHub issue #2 for the wireframe and specs.
 struct RouteBadge: View {
+    /// The route to show. Supplies the number text and the background color.
     let route: Route
 
     var body: some View {
-        // TODO (Issue #2): Replace this placeholder with the real badge.
-        // Use route.number for the text and route.color for the background.
-        PlaceholderBox("RouteBadge \(route.number)")
+        Text(route.number)
+            .font(.title3.bold())
+            .foregroundStyle(route.textColor)
+            .padding(.horizontal, Spacing.ms)
+            .padding(.vertical, Spacing.xs)
+            .background(route.color, in: RoundedRectangle(cornerRadius: Radius.badge))
     }
 }
 
