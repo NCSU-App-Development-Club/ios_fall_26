@@ -13,8 +13,18 @@ struct CategoryPicker: View {
     @Binding var selection: FeedbackCategory
 
     var body: some View {
-        // TODO (Issue #104): Replace this placeholder with the real picker.
-        PlaceholderBox("CategoryPicker: \(selection.title)")
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: Spacing.s) {
+                ForEach(FeedbackCategory.allCases) { category in
+                    Button {
+                        selection = category
+                    } label: {
+                        FeedbackCategoryChip(category: category, isSelected: category == selection)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
     }
 }
 
