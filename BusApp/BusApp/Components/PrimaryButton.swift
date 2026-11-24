@@ -13,10 +13,28 @@ struct PrimaryButton: View {
     /// Replaces the title with a spinner and ignores taps.
     var isLoading: Bool = false
     let action: () -> Void
+    
+    @Environment(\.isEnabled) private var isEnabled
 
     var body: some View {
-        // TODO (Issue #107): Replace this placeholder with the real button.
-        PlaceholderBox("PrimaryButton: \(title)")
+        Button(action: action) {
+            ZStack {
+                if isLoading {
+                    ProgressView()
+                        .tint(.white)
+                } else {
+                    Text(title)
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(Color.ncsuRed, in: Capsule())
+            .opacity(isEnabled ? 1 : 0.4)
+        }
+        .buttonStyle(.plain)
+        .disabled(isLoading)
     }
 }
 
