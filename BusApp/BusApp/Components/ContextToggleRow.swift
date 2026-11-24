@@ -11,8 +11,18 @@ struct ContextToggleRow: View {
     @Binding var isOn: Bool
 
     var body: some View {
-        // TODO (Issue #106): Replace this placeholder with the real row.
-        PlaceholderBox("ContextToggleRow: \(title)")
+        Toggle(isOn: $isOn) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(title)
+                    .font(.body)
+                Text(subtitle)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(.horizontal, Spacing.m)
+        .padding(.vertical, Spacing.ms)
+        .background(Color.cardBackground, in: RoundedRectangle(cornerRadius: Radius.tile))
     }
 }
 
