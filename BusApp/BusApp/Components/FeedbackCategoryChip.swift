@@ -9,10 +9,16 @@ struct FeedbackCategoryChip: View {
     let isSelected: Bool
 
     var body: some View {
-        // TODO (Issue #103): Replace this placeholder with the real chip.
-        PlaceholderBox("FeedbackCategoryChip: \(category.title)")
+        Text(category.title)
+            .foregroundStyle(isSelected ? .white : .primary)
+            .font(.subheadline.weight(.medium))
+            .padding(.horizontal, Spacing.m)
+            .padding(.vertical, 9)
+            .background(isSelected ? Color.ncsuRed : Color.cardBackground, in: Capsule())
     }
 }
+
+
 
 #Preview("Selected and not") {
     HStack(spacing: Spacing.s) {
